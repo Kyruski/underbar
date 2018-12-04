@@ -96,7 +96,25 @@
   };
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array, isSorted, iterator) {
+  _.uniq = function(array, isSorted = false, iterator) {
+    const clone = array.slice();
+    const uniques = [];
+    if (isSorted === true && !iterator) {
+      uniques = _.filter(clone, x => x !== uniques[uniques.length - 1]);
+    } else {
+      for (let i = 0; i < array.length; i++) {
+        if (iterator) {
+          if (iterator(clone[i])){
+            uniques.push(clone[i]);
+          }
+        } else {
+          if (uniques.includes(clone[i]) === false) { 
+            uniques.push(clone[i]);
+          }
+        }
+      }
+    }
+    return uniques;
   };
 
 
