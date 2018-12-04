@@ -50,12 +50,14 @@
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
     if (Array.isArray(collection)) {
-      for (let i = 0; i < collection.length; i++) {
-        iterator(collection[i], i, collection);
+      let clone = collection.slice();
+      for (let i = 0; i < clone.length; i++) {
+        iterator(clone[i], i, clone);
       }
     } else {
-      for (let key in collection) {
-        iterator(collection[key], key, collection);
+      let clone = Object.assign({}, collection);
+      for (let key in clone) {
+        iterator(clone[key], key, clone);
       }
     }
   };
