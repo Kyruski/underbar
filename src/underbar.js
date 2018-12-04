@@ -91,6 +91,8 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    const filtered = _.filter(collection, test);
+    return _.filter(collection, x => (filtered.includes(x) === false));
   };
 
   // Produce a duplicate-free version of the array.
