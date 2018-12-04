@@ -120,6 +120,12 @@
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
+    let clone = collection.slice();
+    for (let i = 0; i < clone.length; i++) {
+      clone[i] = iterator(clone[i]);
+    }
+    return clone;
+    // const clone = collection.slice();
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
