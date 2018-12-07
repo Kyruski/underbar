@@ -49,14 +49,12 @@
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
     if (Array.isArray(collection)) {
-      let clone = collection.slice();
-      for (let i = 0; i < clone.length; i++) {
-        iterator(clone[i], i, clone);
+      for (let i = 0; i < collection.length; i++) {
+        iterator(collection[i], i, collection);
       }
     } else {
-      let clone = Object.assign({}, collection);
-      for (let key in clone) {
-        iterator(clone[key], key, clone);
+      for (let key in collection) {
+        iterator(collection[key], key, collection);
       }
     }
   };
@@ -174,10 +172,19 @@
       total = collection[0];
       j = 1;
     }
-    for (let i = j; i < collection.length; i++) {
-      let output = iterator(total, collection[i]);
-      if (output !== undefined) {
-        total = output;
+    if (Array.isArray(collection)) {
+      for (let i = j; i < collection.length; i++) {
+        let output = iterator(total, collection[i]);
+        if (output !== undefined) {
+          total = output;
+        }
+      }
+    } else {
+      for (let key in collection) {
+        let output = iterator(total, collection[key]);
+        if (output !== undefined) {
+          total = output;
+        }
       }
     }
     return total;
