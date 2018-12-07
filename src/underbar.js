@@ -205,11 +205,10 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) { 
-    if (collection.length === 0) return true ;
     let array = collection.slice();
     if (iterator) {
       const reducer = function (total, current) {
-        total.push(Array.isArray(current) || Object(current) === current ? true : iterator(current) == true );
+        total.push(!!iterator(current) == true);
         return total;
       }
       array = _.reduce(collection, reducer, []);
@@ -223,6 +222,15 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    let array = collection.slice();
+    if (iterator) {
+      const reducer = function (total, current) {
+        total.push(!!iterator(current) == true);
+        return total;
+      }
+      array = _.reduce(collection, reducer, []);
+    } 
+    return (array.includes(true)) ? true : false ;
   };
 
 
