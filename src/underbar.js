@@ -204,7 +204,18 @@
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
+  _.every = function(collection, iterator) { 
+    if (collection.length === 0) return true ;
+    let array = collection.slice();
+    if (iterator) {
+      const reducer = function (total, current) {
+        total.push(Array.isArray(current) || Object(current) === current ? true : iterator(current) == true );
+        return total;
+      }
+      array = _.reduce(collection, reducer, []);
+    }
+    return (array.includes(false)) ? false : true ;
+    
     // TIP: Try re-using reduce() here.
   };
 
