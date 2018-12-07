@@ -103,14 +103,12 @@
       uniques = _.filter(clone, x => x !== uniques[uniques.length - 1]);
     } else {
       for (let i = 0; i < array.length; i++) {
+        let value = clone[i];
         if (iterator) {
-          if (iterator(clone[i])){
-            uniques.push(clone[i]);
-          }
-        } else {
-          if (uniques.includes(clone[i]) === false) { 
-            uniques.push(clone[i]);
-          }
+          value = iterator(clone[i])
+        }
+        if (uniques.includes(value) === false) { 
+          uniques.push(value);
         }
       }
     }
