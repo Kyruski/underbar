@@ -317,6 +317,16 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    let alreadyCalled = {}
+
+    return function() {
+      let key = Array.from(arguments).join('-');
+      if (!alreadyCalled[key]) {
+        alreadyCalled[key] = func(...arguments);
+      }
+      return alreadyCalled[key];
+
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
