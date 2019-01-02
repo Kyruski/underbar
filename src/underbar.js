@@ -79,18 +79,24 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     const arr = [];
-    for (let i = 0; i < collection.length; i++) {
-      if (test(collection[i])) { arr.push(collection[i]) };
-    }
+    _.each(collection, function(value) {
+      if (test(value)) arr.push(value);
+    });
     return arr;
+    // for (let i = 0; i < collection.length; i++) {
+    //   if (test(collection[i])) { arr.push(collection[i]) };
+    // }
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    const filtered = _.filter(collection, test);
-    return _.filter(collection, x => (filtered.includes(x) === false));
+    // const filtered = _.filter(collection, test);
+    // return _.filter(collection, x => (filtered.includes(x) === false));
+    return _.filter(collection, function(x) {
+      return !(test(x));
+    });
   };
 
   // Produce a duplicate-free version of the array.
@@ -116,11 +122,16 @@
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
-    let clone = collection.slice();
-    for (let i = 0; i < clone.length; i++) {
-      clone[i] = iterator(clone[i]);
-    }
-    return clone;
+    // let clone = collection.slice();
+    // for (let i = 0; i < clone.length; i++) {
+    //   clone[i] = iterator(clone[i]);
+    // }
+    // return clone;
+    let results = [];
+    _.each(collection, function(value, key, collection) {
+      results.push(iterator(value, key, collection));
+    });
+    return results;
     // const clone = collection.slice();
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
@@ -166,28 +177,35 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    let total = accumulator;
-    let j = 0
-    if (accumulator === undefined) {
-      total = collection[0];
-      j = 1;
-    }
-    if (Array.isArray(collection)) {
-      for (let i = j; i < collection.length; i++) {
-        let output = iterator(total, collection[i]);
-        if (output !== undefined) {
-          total = output;
-        }
+    let initalize = accumulator === undefined;
+    _.each(collection, function(value) {
+      if (initalize) {
+        accumulator = value;
+        initalize = false;
+      } else {
+        let output = iterator(accumulator, value);
+        if (output !== undefined) accumulator = output;
       }
-    } else {
-      for (let key in collection) {
-        let output = iterator(total, collection[key]);
-        if (output !== undefined) {
-          total = output;
-        }
-      }
-    }
-    return total;
+    });
+    return accumulator;
+    // if (Array.isArray(collection)) {
+    //   _.each(collection. function(value) {
+    //     let output = iterator(total, value)''
+    //   })
+    //   for (let i = j; i < collection.length; i++) {
+    //     let output = iterator(total, collection[i]);
+    //     if (output !== undefined) {
+    //       total = output;
+    //     }
+    //   }
+    // } else {
+    //   for (let key in collection) {
+    //     let output = iterator(total, collection[key]);
+    //     if (output !== undefined) {
+    //       total = output;
+    //     }
+    //   }
+    // }
   };
 
   // Determine if the array or object contains a given value (using `===`).
